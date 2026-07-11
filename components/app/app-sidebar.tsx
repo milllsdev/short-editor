@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { CircleHelp, FolderOpen, LayoutDashboard, Plus, Settings } from "lucide-react";
+import { CircleHelp, FolderOpen, LayoutDashboard, LogOut, Plus, Settings } from "lucide-react";
 import { Brand } from "@/components/brand";
+import { signOut } from "@/app/auth/actions";
 
 const navigation = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -21,6 +22,7 @@ export function AppSidebar() {
         <div className="space-y-1 border-t border-white/[0.08] p-3">
           <span className="flex h-10 items-center gap-3 px-3 text-sm text-zinc-500"><CircleHelp className="size-4" />Help center</span>
           <span className="flex h-10 items-center gap-3 px-3 text-sm text-zinc-500"><Settings className="size-4" />Settings</span>
+          <form action={signOut}><button type="submit" className="flex h-10 w-full items-center gap-3 px-3 text-sm text-zinc-500 transition-colors hover:text-white"><LogOut className="size-4" />Sign out</button></form>
           <div className="mt-3 flex items-center gap-3 border-t border-white/[0.08] px-2 pt-4">
             <span className="grid size-8 place-items-center rounded-full bg-[#273142] text-xs font-semibold text-blue-200">AM</span>
             <div className="min-w-0"><p className="truncate text-xs font-medium text-white">Alex Morgan</p><p className="truncate text-[11px] text-zinc-500">Creator plan</p></div>
@@ -31,6 +33,7 @@ export function AppSidebar() {
         <Link href="/dashboard" className="flex flex-col items-center gap-1 text-[10px] text-white"><LayoutDashboard className="size-5" />Home</Link>
         <Link href="/dashboard/new" className="grid size-10 place-items-center rounded-[var(--button-radius)] bg-blue-500 text-white" aria-label="New project"><Plus className="size-5" /></Link>
         <span className="flex flex-col items-center gap-1 text-[10px] text-zinc-500"><Settings className="size-5" />Settings</span>
+        <form action={signOut}><button type="submit" className="flex flex-col items-center gap-1 text-[10px] text-zinc-500"><LogOut className="size-5" />Sign out</button></form>
       </nav>
     </>
   );

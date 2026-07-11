@@ -53,7 +53,7 @@ export default function LandingPage() {
             <a href="#pricing" className="text-sm text-zinc-300 transition-colors hover:text-white">Pricing</a>
           </div>
           <div className="flex items-center justify-self-end gap-2 sm:gap-3">
-            <Link href="/dashboard" className="hidden px-1.5 text-sm text-zinc-300 transition-colors hover:text-white sm:block">Sign in</Link>
+            <Link href="/sign-in" className="hidden px-1.5 text-sm text-zinc-300 transition-colors hover:text-white sm:block">Sign in</Link>
             <ButtonLink href="/dashboard/new" className="-mr-2 px-3.5 sm:px-[18px]" style={{ borderRadius: 13 }}>Create your first Short</ButtonLink>
           </div>
         </nav>
