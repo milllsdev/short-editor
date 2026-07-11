@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #08090b;
+  --foreground: #f7f8fa;
+  --muted: #9ca3af;
+  --panel: #111318;
+  --panel-strong: #171a21;
+  --border: #292d36;
+  --accent: #4f8cff;
+  --accent-hover: #6ba0ff;
+  --button-radius: 13px;
 }
 
 @theme inline {
@@ -12,15 +19,38 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.5;
+}
+
+* {
+  border-color: var(--border);
+}
+
+::selection {
+  background: rgba(79, 140, 255, 0.35);
+  color: #fff;
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.nav-type,
+.button-label,
+button {
+  font-weight: 500;
+  border-radius: var(--button-radius);
 }
