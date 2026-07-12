@@ -1,15 +1,19 @@
 "use client";
 
-import { useRef, useState, type DragEvent } from "react";
+import { useRef, useState, useTransition, type DragEvent } from "react";
 import { Check, FileVideo, Link2, Upload, X } from "lucide-react";
+import { createProject } from "@/app/(app)/dashboard/new/actions";
 
 const contentTypes = ["Podcast", "Interview", "Talking Head", "Educational"];
 
 export function UploadForm() {
+  const [projectName, setProjectName] = useState("Untitled project");
   const [contentType, setContentType] = useState("Podcast");
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [showLink, setShowLink] = useState(false);
+  const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
   function chooseFiles(files: FileList | null) {
@@ -23,11 +27,23 @@ export function UploadForm() {
     chooseFiles(event.dataTransfer.files);
   }
 
+  function handleCreateProject() {
+    setError("");
+    startTransition(async () => {
+      try {
+        const result = await createProject({ name: projectName, contentType });
+        if (result?.error) setError(result.error);
+      } catch {
+        setError("We could not create the project. Please try again.");
+      }
+    });
+  }
+
   return (
     <div className="space-y-7">
       <div>
         <label htmlFor="project-name" className="mb-2 block text-sm font-medium text-zinc-200">Project name</label>
-        <input id="project-name" defaultValue="Untitled project" className="h-11 w-full rounded-md border border-white/10 bg-[#111318] px-3.5 text-sm text-white placeholder:text-zinc-600 focus:border-blue-400 focus:outline-none" />
+        <input id="project-name" value={projectName} onChange={(event) => setProjectName(event.target.value)} maxLength={120} className="h-11 w-full rounded-md border border-white/10 bg-[#111318] px-3.5 text-sm text-white placeholder:text-zinc-600 focus:border-blue-400 focus:outline-none" />
       </div>
 
       <fieldset>
@@ -56,8 +72,8 @@ export function UploadForm() {
       {!showLink ? <button type="button" onClick={() => setShowLink(true)} className="flex h-11 w-full items-center justify-center gap-2 rounded-[var(--button-radius)] border border-white/10 bg-white/[0.025] px-5 py-0.5 text-sm text-zinc-300 transition-colors hover:bg-white/[0.05] hover:text-white"><Link2 className="size-4" />Import from a link</button> : <div><label htmlFor="video-link" className="sr-only">Video link</label><div className="flex gap-2"><div className="relative flex-1"><Link2 className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-600" /><input id="video-link" placeholder="Paste a YouTube, Google Drive, or direct video link" className="h-11 w-full rounded-md border border-white/10 bg-[#111318] pl-10 pr-3 text-sm text-white placeholder:text-zinc-600 focus:border-blue-400 focus:outline-none" /></div><button type="button" className="h-11 rounded-[var(--button-radius)] border border-white/10 px-5 py-0.5 text-sm text-zinc-300 hover:bg-white/[0.04]">Import</button></div></div>}
 
       <div className="flex flex-col-reverse items-stretch justify-between gap-4 border-t border-white/[0.08] pt-6 sm:flex-row sm:items-center">
-        <p className="text-xs text-zinc-600">Your original video remains unchanged.</p>
-        <button type="button" disabled={!file} className="h-11 rounded-[var(--button-radius)] bg-blue-500 px-7 py-0.5 text-sm text-white transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-600">Generate Shorts</button>
+        <p role={error ? "alert" : undefined} className={`text-xs ${error ? "text-red-300" : "text-zinc-600"}`}>{error || "Your original video remains unchanged."}</p>
+        <button type="button" onClick={handleCreateProject} disabled={!file || isPending} className="h-11 rounded-[var(--button-radius)] bg-blue-500 px-7 py-0.5 text-sm text-white transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:text-zinc-600">{isPending ? "Creating project..." : "Generate Shorts"}</button>
       </div>
     </div>
   );

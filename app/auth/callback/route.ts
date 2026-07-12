@@ -2,6 +2,7 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { getSupabaseConfig } from "@/lib/supabase/config";
+import type { Database } from "@/lib/supabase/database.types";
 
 function safeNext(value: string | null) {
   return value?.startsWith("/") && !value.startsWith("//")
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
   const response = NextResponse.redirect(destination);
   const { url, publishableKey } = getSupabaseConfig();
 
-  const supabase = createServerClient(url, publishableKey, {
+  const supabase = createServerClient<Database>(url, publishableKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
