@@ -36,3 +36,4 @@ export type Database = {
 };
 
 export type Project = Database["public"]["Tables"]["projects"]["Row"];
+export type VideoAsset = Database["public"]["Tables"]["video_assets"]["Row"];
